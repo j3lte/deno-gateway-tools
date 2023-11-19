@@ -21,6 +21,14 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1
 
+      - name: Cache Deno
+        id: cache-deno
+        uses: actions/cache@v3
+        with:
+            path: ~/.cache/deno
+            # Might need a hash of the lock file here?
+            key: ${{ runner.os }}-deno-gateway-tools
+
       - name: Check format
         if: matrix.os == 'ubuntu-22.04'
         run: deno fmt --check
