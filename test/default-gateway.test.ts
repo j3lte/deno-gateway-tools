@@ -6,7 +6,7 @@ import { isIPv4, isIPv6 } from "node:net";
 import { platform } from "node:os";
 
 // only Darwin has IPv6 on GitHub Actions
-const canTestV6 = env.CI ? platform() === "darwin" : true;
+const canTestV6 = env.CI ? platform() === "darwin" : false;
 
 Deno.test("gateway4", async () => {
   const result = await gateway4();

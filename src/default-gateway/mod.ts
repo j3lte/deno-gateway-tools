@@ -4,7 +4,7 @@ import { isIP } from "node:net";
 const plat = platform();
 const dests = new Set(["default", "0.0.0.0", "0.0.0.0/0", "::", "::/0"]);
 
-const exec = async (cmd: string, args: string[], opts?: any) => {
+const exec = async (cmd: string, args: string[]) => {
   const command = new Deno.Command(cmd, { args });
   const { code, stdout, stderr } = await command.output();
   if (code !== 0) throw new Error(`Command failed: ${cmd} ${args.join(" ")}`);
@@ -68,10 +68,6 @@ if (plat === "linux") {
     `path Win32_NetworkAdapter where Index=${index} get NetConnectionID,MACAddress /format:table`
       .split(" ");
 
-  const spawnOpts = {
-    windowsHide: true,
-  };
-
   // Parsing tables like this. The final metric is GatewayCostMetric + IPConnectionMetric
   //
   // DefaultIPGateway             GatewayCostMetric  Index  IPConnectionMetric
@@ -129,13 +125,13 @@ if (plat === "linux") {
   };
 
   promise = async (family) => {
-    const { stdout } = await exec("wmic", gwArgs, spawnOpts);
+    const { stdout } = await exec("wmic", gwArgs);
     const [gateway, id] = parseGwTable(stdout, family) || [];
     if (!gateway) throw new Error("Unable to determine default gateway");
 
     let name;
     if (id) {
-      const { stdout } = await exec("wmic", ifArgs(id), spawnOpts);
+      const { stdout } = await exec("wmic", ifArgs(id));
       name = parseIfTable(stdout);
     }
 
@@ -182,6 +178,7 @@ if (plat === "linux") {
       const gateway = resultObj.records[0].NEXT_HOP;
       const iface = resultObj.records[0].LOCAL_BINDING_INTERFACE;
       return { gateway, version: family, int: (iface ?? null) };
+      // deno-lint-ignore no-empty
     } catch {}
     throw new Error("Unable to determine default gateway");
   };
