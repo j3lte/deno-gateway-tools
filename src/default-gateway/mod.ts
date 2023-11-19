@@ -4,6 +4,30 @@ import { isIP } from "node:net";
 const plat = platform();
 const dests = new Set(["default", "0.0.0.0", "0.0.0.0/0", "::", "::/0"]);
 
+/**
+ * @typedef {Object} Gateway
+ * @property {string} gateway The gateway IP address
+ * @property {number} version The IP version
+ * @property {string | null} int The interface name
+ */
+export type Gateway = {
+  /**
+   * The gateway IP address
+   * @type {string}
+   */
+  gateway: string;
+  /**
+   * The IP version
+   * @type {number}
+   */
+  version: number;
+  /**
+   * The interface name
+   * @type {string | null}
+   */
+  int: string | null;
+};
+
 const exec = async (cmd: string, args: string[]) => {
   const command = new Deno.Command(cmd, { args });
   const { code, stdout, stderr } = await command.output();
@@ -11,7 +35,7 @@ const exec = async (cmd: string, args: string[]) => {
   return { stdout: new TextDecoder().decode(stdout), stderr: new TextDecoder().decode(stderr) };
 };
 
-let promise: (family: number) => Promise<{ gateway: string; version: number; int: string | null }>;
+let promise: (family: number) => Promise<Gateway>;
 
 if (plat === "linux") {
   const parse = (stdout: string, family: number) => {
@@ -225,11 +249,11 @@ if (plat === "linux") {
 
 /**
  * Get default gateway for IPv4
- * @returns {Promise<{ gateway: string; version: number; int: string | null }>}
+ * @returns {Promise<Gateway>}
  */
 export const gateway4 = () => promise(4);
 /**
  * Get default gateway for IPv6
- * @returns {Promise<{ gateway: string; version: number; int: string | null }>}
+ * @returns {Promise<Gateway>}
  */
 export const gateway6 = () => promise(6);
