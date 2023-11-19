@@ -27,7 +27,7 @@ jobs:
         with:
             path: ~/.cache/deno
             # Might need a hash of the lock file here?
-            key: ${{ runner.os }}-deno-gateway-tools
+            key: ${{ matrix.os }}-deno-gateway-tools
 
       - name: Check format
         if: matrix.os == 'ubuntu-22.04'
