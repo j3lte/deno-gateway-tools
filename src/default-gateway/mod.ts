@@ -1,3 +1,10 @@
+/**
+ * Modified version of the npm package: default-gateway
+ *
+ * Repository: https://github.com/silverwind/default-gateway
+ * License: BSD-2-Clause (https://opensource.org/license/bsd-2-clause/)
+ */
+
 import { networkInterfaces, platform, release, type } from "node:os";
 import { isIP } from "node:net";
 
