@@ -4,8 +4,7 @@
     "lint": "deno lint ./src/",
     "test": "deno test --allow-sys --allow-run",
     "test:watch": "deno test --watch",
-    "clean": "rm -r ./coverage",
-    "localTest": "deno run --allow-sys --allow-read --allow-write --allow-run ./scripts/runTest.ts"
+    "clean": "rm -r ./coverage"
   },
   "fmt": {
     "options": {
