@@ -2,7 +2,7 @@
   "tasks": {
     "format": "deno fmt ./src/",
     "lint": "deno lint ./src/",
-    "test": "deno test --allow-sys --allow-run",
+    "test": "deno test --allow-sys --allow-run --allow-env",
     "test:watch": "deno test --watch",
     "clean": "rm -r ./coverage"
   },
